@@ -33,6 +33,10 @@ maintable <- hwrite( final,
 
 hwrite(maintable, page="table.html")
 
+#####hetamp2
+heatmap.2(as.matrix( dd[,c(1:12)]), col=greenred(30), trace="none",
+                    Colv=FALSE, Rowv=FALSE, dendrogram = "none",scale="row",
+          labRow = FALSE,cexRow=0.075,main="Significant rythmic genes in dark phase",keysize=1)
 
 
 
