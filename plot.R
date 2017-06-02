@@ -41,3 +41,48 @@ ggsave(paste('~/Desktop/Light-dark/images/',i , '.png', sep=''), width=20, heigh
  HTMLoutput=file.path(".","output.html")
  graph1="light_inducibale_gene.png"
  HTMLInsertGraph(graph1,file=HTMLoutput,caption="Sample discrete distribution plot")
+
+#######pdf(file='ressig_11hr.pdf', height=10, width=12)
+xaxis=c(18,20,22,0,1,2,4,6,8,10,11,11.5,12,16)
+
+pdf(file='sig_gene.pdf', height=10, width=12)
+xaxis=c(0,1,2,4,6,8,10,11,11.5,12,16,18,20,22)
+
+par(mfrow=c(3,3))
+
+
+for(i in 1:nrow(idx))
+{
+    dd_wt=idx[i,c(38:40,29:37)]
+    del_dd=idx[i,c(70:72,61:69)]
+    #dd_wt=idx[i,29:40]
+    #dd_pub=idx[i,41:52]
+    #dd_df=idx[i,53:60]
+    plot(xaxis,log2(dd_wt)+1,type="l",ylab="norm.count(log2+1)",xlab="Time(hours)",xlim=c(0,22),main=idx$ens.id[i],ylim=c(5,18))
+    points(xaxis,log2(del_dd)+1,pch=18,col="blue",lwd = 5)
+    lines(xaxis,log2(dd_wt)+1,col="blue")
+    
+    lines(xaxis,log2(del_df)+1,col="red")
+    points(xaxis,log2(del_df)+1,pch=18,col="red",lwd = 5)
+    
+    
+  #  x=c(0,2,4,6,8,10,12,14,16,18,20,22)
+   # lines(x,log2(dd_wt)+1,col="green",,main=rownames(idx)[i])
+    #points(x,log2(dd_wt)+1,pch=18,col="green",lwd = 5)
+    
+   # z=c(0,2,4,6,8,10,12,14,16,18,20,22)
+    #lines(z,log2(dd_pub)+1,col="black",,main=rownames(idx)[i])
+    #points(z,log2(dd_pub)+1,pch=18,col="black",lwd = 5)
+    
+    #t=c(0,2,4,6,8,10,12,14)
+    #lines(t,log2(dd_df)+1,col="orange",,main=rownames(idx)[i])
+    #points(t,log2(dd_df)+1,pch=18,col="orange",lwd = 5)
+    
+    legend("topright",c("dd-wt","led_dd"),fill=c("blue","red"))
+}
+dev.off()
+
+
+
+
+
