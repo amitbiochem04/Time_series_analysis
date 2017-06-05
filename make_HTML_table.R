@@ -54,3 +54,27 @@ maintable <- hwrite( ressig,
                      center=TRUE,onmouseover="this.bgColor='#ffaaaa'", 
                      onmouseout="this.bgColor='white'", bgcolor='white')
 hwrite(maintable, page="differential regulated gene table.html")
+
+
+
+
+########extract html file in r 
+library(XML)
+library(RCurl)
+library(xlsx)
+extrextract information from webpage 
+#http://fungidb.org/fungidb/app/record/gene/
+http://nptel.ac.in/courses/109104115/
+##click right mouse and look for pageview source, look for conetnt that you look for this 
+###use internal node,so what ever html there it will extract 
+extracthtml<-htmlTreeParse('http://nptel.ac.in/courses/109104115/',useInternalNodes = TRUE)
+###we need to find the extract that is use full, here we have to get the tag, we have to specify the begnining the tag and end tag  
+content<-getNodeSet(extracthtml,"//ul//li")
+content
+x<-length(content)
+content<-sapply(content,xmlValue)
+
+
+
+
+
