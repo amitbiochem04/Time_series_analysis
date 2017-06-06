@@ -141,6 +141,40 @@ lines(xaxis,csp1_dd,col="red")
   
 legend("topright",c("dd-wt","csp1_dd"),fill=c("blue","red"))
 
+for(i in 1:nrow(idx))
+ {
+   jpeg(file=paste("~/Desktop/Light-dark/rythim_gene_analysis/dark_dark_rep/image/", rownames(idx)[i],
+                   ".jpeg", sep=""), width = 3, height = 4, units = 'in', res = 300)
+   dd_wt=idx[i,c(38:40,29:37)]
+   csp1_dd=idx[i,c(70:72,61:69)]
+   #gene=rownames(dd_wt)[i]
+   #dd_wt=idx[i,29:40]
+   #dd_pub=idx[i,41:52]
+   #dd_df=idx[i,53:60]
+   plot(xaxis,dd_wt,type="l",ylab="count(log2+1)",xlab="Time(hr)",main=rownames(idx)[i],xaxt='n',ylim=c(0,22))
+   points(xaxis,dd_wt,pch=20,col="blue",lwd = 0.5)
+   lines(xaxis,dd_wt,col="blue")
+  
+   lines(xaxis,csp1_dd,col="red")
+   points(xaxis,csp1_dd,pch=20,col="red",lwd = 0.5)
+   axis(1, at=xaxis,labels=c(18,20,22,0,2,4,6, 8,10,12,14,16))
+   #  x=c(0,2,4,6,8,10,12,14,16,18,20,22)
+# lines(x,log2(dd_wt)+1,col="green",,main=rownames(idx)[i])
+  #points(x,log2(dd_wt)+1,pch=18,col="green",lwd = 5)  
+  # z=c(0,2,4,6,8,10,12,14,16,18,20,22)
+   #lines(z,log2(dd_pub)+1,col="black",,main=rownames(idx)[i])
+   #points(z,log2(dd_pub)+1,pch=18,col="black",lwd = 5)
+   
+  #t=c(0,2,4,6,8,10,12,14)
+ #lines(t,log2(dd_df)+1,col="orange",,main=rownames(idx)[i])
+   #points(t,log2(dd_df)+1,pch=18,col="orange",lwd = 5)
+   
+   legend("topright",c("dd-wt","csp1_dd"),fill=c("blue","red"),x.intersp=0.5,y.intersp=1,cex=0.5, bty="n")
+   
+   #jpeg(file = paste(rownames(idx)[i], '.jpeg', sep = ''))
+     dev.off()
+  print(i)
+ }
 
 #jpeg(file = paste(rownames(idx)[i], '.jpeg', sep = ''))
 dev.off()
