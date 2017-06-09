@@ -196,4 +196,26 @@ print(i)
 
 
 
+#####
+for( i in row.names(test))
+{
+ p<-data.frame(colData(fullData),t(counts(fullData, normalized=TRUE)[i, , drop=FALSE]) )[c(29:40,61:72),] %>%
+    gather( "gene", "ncount", -(1:5) )
+ p$time<-factor(p$time,levels=c("18","20","22","0","2","4", "6","8","10","12","14","16"))
+ d<-p%>%
+ ggplot +geom_line(aes(x=time, y=log2(ncount+1), col=samplelabel,group=p$samplelabel)) + facet_wrap(~gene)
+  d<- d+ xlab("Time[h]") + ylab("Log2(count)+1")
+  #p<-p+theme_bw()+coord_fixed(ratio=1)
+  d<-d+theme_bw()+theme(aspect.ratio=3/11)
+    #ticks <-data.frame(t = c(0,2,4,6,8,10,12,14,16,18,20,22), l = c(18,20,22,0,2,4, 6,8,10,12,14,16))
+  #d<-d+ scale_x_discrete(limits=c(ticks$t),labels=c(ticks$l))
+  d<-d+geom_point(aes(x=time,y=log2(ncount+1),col=samplelabel))
+  #p<-p+ scale_x_continuous(breaks = c(0,2, 4, 6,8,10,12,14,16,18,20,22)) 
+ d<-d+theme(axis.text = element_text (face="bold", size=14), axis.title=element_text(size=18,face="bold"))
+ d<-d+theme(legend.title = element_text(size=16, face="bold"),legend.text = element_text(size = 16, face = "bold"))
+ d<-d+theme(strip.text = element_text(size=25,face="bold"))
+  #theme(legend.title = element_text(colour="blue", size=16, face="bold"))
+ggsave(paste('/Users/amit/Desktop/Light-dark/rythim_gene_analysis/dark_dark_rep/image/',i , '.jpeg', sep=''), width=10, height=20, d)
+print(i)
+}
 
