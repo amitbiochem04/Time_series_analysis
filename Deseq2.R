@@ -68,3 +68,5 @@ colnames(df)<-c("ens.id","symbol")
 #df<-df[!duplicated(df), ]
 ressig<-as.data.frame(cbind(ressig,df[!duplicated(df), ]))
 ####save the file 
+write.xlsx(ressig,file="Light_Indicube.xlsx",asTable = TRUE)
+
