@@ -256,7 +256,7 @@ mydata<-dd[,c(1:12)]
 category=c(rep("Day_gene", 91),rep("Morning_and_evening_gene", 88), rep("Morning_gene",38 ))
 mydf<-data.frame(row.names(mydata),category)
 col1<-c("red","blue","black")
-CairoPDF(file="Rythmic_gene_with out 0h",width=10/1.54,height=10/1.54)
+CairoPDF(file="Rythmic_gene_with_0h",width=10/1.54,height=10/1.54)
 #heatmap.2(as.matrix( dd[,c(1:11)]),Colv=F,col=greenred(30),trace="none",scale="row",dendrogram = "none")
 heatmap.2(as.matrix(mydata), col=greenred(30), trace="none",
           Colv=FALSE, Rowv=FALSE, dendrogram = "none",scale="row",rowsep = c(91,179),
