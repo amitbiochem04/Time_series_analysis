@@ -140,7 +140,7 @@ amplitute <- as.vector( c() )
 phase <- as.vector( c() )
  
  for( i in 1:nrow( newmat ))  {
-  y <- as.numeric( newmat[i,2:11 ] )
+  y <- as.numeric( newmat[i,2:12 ] )
   fit1 <- lm( y ~ x + cos( x/22*2*pi ) + sin( x/22*2*pi ) )
   fit0 <- lm( y ~ x )
   #fit1<-glm.nb( y ~ x + cos( x/22*2*pi ) + sin( x/22*2*pi ) )
@@ -178,10 +178,12 @@ colnames(df)<-c("ens.id","symbol")
 df<-df[!duplicated(df), ]
 sig<-as.data.frame( cbind( sig,df[!duplicated(df), ]))
 save(sig,file="ryth_dd_rep_with_out_0_log.rda")
+
+write.xlsx(sig, "rythmicgene_with_out0.xlsx",row.names=TRUE,asTable = TRUE)
 ####
 dd<-subset(sig,p.adj < 0.1)
 dd<-dd[ order( dd[,"phase"] ), ]
-dd$phase<-abs(dd$phase)
+#dd$phase<-abs(dd$phase)
 mydata<-dd[,c(1:11)]
 category=c(rep("Day_gene", 50),rep("Morning_and_evening_gene", 14), rep("Morning_gene",16 ))
 mydf<-data.frame(row.names(mydata),category)
@@ -243,19 +245,21 @@ df<-df[,1:2]
 colnames(df)<-c("ens.id","symbol")
 df<-df[!duplicated(df), ]
 sig<-as.data.frame( cbind( sig,df[!duplicated(df), ]))
-write.xlsx(sig, "rythmicgene.xlsx",row.names=TRUE)
+save(sig,file="ryth_dd_rep_with_0_log.rda")
+write.xlsx(sig, "rythmicgene.xlsx",row.names=TRUE,asTable = TRUE)
 #####plot
 dd<-subset(sig,p.adj < 0.1)
-dd<-dd[ order( dd[,"phase"] ), ]
-dd$phase<-abs(dd$phase)
+#dd<-dd[ order( dd[,"phase"] ), ]
+dd<-dd[ order( dd$phase , decreasing=FALSE),]
+#dd$phase<-abs(dd$phase)
 mydata<-dd[,c(1:12)]
-category=c(rep("Day_gene", 50),rep("Morning_and_evening_gene", 14), rep("Morning_gene",16 ))
+category=c(rep("Day_gene", 91),rep("Morning_and_evening_gene", 88), rep("Morning_gene",38 ))
 mydf<-data.frame(row.names(mydata),category)
 col1<-c("red","blue","black")
 CairoPDF(file="Rythmic_gene_with out 0h",width=10/1.54,height=10/1.54)
 #heatmap.2(as.matrix( dd[,c(1:11)]),Colv=F,col=greenred(30),trace="none",scale="row",dendrogram = "none")
 heatmap.2(as.matrix(mydata), col=greenred(30), trace="none",
-          Colv=FALSE, Rowv=FALSE, dendrogram = "none",scale="row",rowsep = c(50,64),
+          Colv=FALSE, Rowv=FALSE, dendrogram = "none",scale="row",rowsep = c(91,179),
          labRow=NA,density.info="none",
         RowSideColors=col1[as.numeric(mydf$category)] )
 dev.off()
