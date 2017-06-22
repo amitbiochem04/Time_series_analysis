@@ -193,7 +193,7 @@ CairoPDF(file="Rythmic_gene_with out 0h",width=10/1.54,height=10/1.54)
 heatmap.2(as.matrix(mydata), col=greenred(30), trace="none",
           Colv=FALSE, Rowv=FALSE, dendrogram = "none",scale="row",rowsep = c(50,64),
          labRow=NA,density.info="none",
-        RowSideColors=col1[as.numeric(mydf$category)] )
+        RowSideColors=col1[as.numeric(mydf$category)],breaks = seq(-2, 2,length.out = 30+1) )
 dev.off()
 
 ######
@@ -261,7 +261,7 @@ CairoPDF(file="Rythmic_gene_with_0h",width=10/1.54,height=10/1.54)
 heatmap.2(as.matrix(mydata), col=greenred(30), trace="none",
           Colv=FALSE, Rowv=FALSE, dendrogram = "none",scale="row",rowsep = c(91,179),
          labRow=NA,density.info="none",
-        RowSideColors=col1[as.numeric(mydf$category)] )
+        RowSideColors=col1[as.numeric(mydf$category)],breaks = seq(-2, 2,length.out = 30+1))
 dev.off()
 
 ###########
