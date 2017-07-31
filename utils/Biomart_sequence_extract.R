@@ -51,7 +51,9 @@ ensembl_id=c("NCU11424","NCU15815")
 
 gb <-getBM(attributes=c("ensembl_gene_id","external_gene_name"),filters = "ensembl_gene_id", values=id$name, mart=fungi)
 
-
+######
+library("qpcR")
+dta <- qpcR:::cbind.na(a, df)
 
 
 
