@@ -317,5 +317,117 @@ colnames(df)<-c("ens.id","symbol")
 sig<-as.data.frame( cbind( sig,df[!duplicated(df), ]))
 save(sig,file="ryth_dd_rep_with__out_0_log.rda")
                 
+########################
+                
+                y1<-c(NA,NA,NA,8,8,9,7,4,8);
+x<-c("fail","fail","pass","fail","pass","fail","fail","fail","pass")
+y2<-c(NA,8.14,8,9.26,8,10,6.13,3.10,9.13);
+lib<-c(0,1,1,1,0,0,0,1,1)
+##dat2$scode[dat2$sex=="M"]<-"1" 
+#dat2$scode[dat2$sex=="F"]<-"0" 
+ sex<-c(0,1,1,1,0,0,0,1,0)
+ model.omit <- lm(y2 ~ y1, na.action = na.omit);
+ resid(model.omit)
+ ##here you see that there model fit from 4 to 9 observation 
+ ##but you need to use following function which ll not take na value in account
+ #and will ignore the value
+ model.exclude <- lm(y2 ~ y1+lib+sex,na.action = na.exclude)
+ model.exclude2 <- lm(y2 ~ y1,na.action = na.exclude)
+ final<-anova( model.exclude, model.exclude2)
+ ##
+#resid( model.exclude)
+ #logLik(model.exclude)
+ #summary(model.exclude)$r.squared
+ #anova(model.exclude)
+ ### 
+ #coef(summary(model.exclude))[, "Pr(>|t|)"]
+ ##
+#plot(model.exclude)
+#summary(model.exclude)$coefficients[2,4]
+#abline(model.exclude$coef[1],model.exclude$coef[2],model.exclude$coef[3],model.exclude$coef[4])
+
+
+
+#####
+
+###here is the real model 
+x<-dss
+#x = seq( 0,, by=2)
+approx <- as.data.frame( mat.or.vec( nrow( data), 52))
+model_pval<- as.vector(c())
+sex<- as.vector(c())
+batch<- as.vector(c())
+Log2FC<-as.vector(c())
+FC<-as.vector(c())
+for( i in 1:nrow( data) ){
+  y <- as.numeric( data[ i,1:52 ])
+  ###here is the full model 
+  fit1 <- lm( y ~ x + Extraction_Method+colData(rnaSE1), na.action = na.exclude)
+  ###here is the minmal model
+  fit0 <- lm( y ~ x, na.action = na.exclude)
+###lets look for limma fold chnage how that calulate 
+##here i took predicted value 
+B<-mean(predict(fit1),na.rm=TRUE)
+A<-mean(i,na.rm=TRUE)
+Log2FC[i] = log2(B) - log2(A)
+FC[i] = 2 ^ log2FC
+###to get final pvlaue we can use anova ##
+###here you should comapre two model by anovan that would be the final model information
+model<-anova( fit0, fit1 )
+###get the p value for the model, this pvalue we are actually looking
+model_pval[i]<-model$`Pr(>F)`[2]
+##if you like to comapre or tell some words about the age has any effect or not 
+##then you have to have a pvalue for that so we follwoing way.
+batch_pval[i]<-summary( fit )$coefficients[ 3,4 ]
+sex_pval[i]<-summary( fit )$coefficients[4,4]
+####just put all the data in a same data file so that you can also check for expression wise 
+approx <- as.data.frame( cbind( data,Log2FC,FC,model_pval, batch_pval, sex_pval) )
+###now adjust your pvalue
+approx$model_p.adj<-p.adjust( approx$model_pval, method = "BH",n = length( approx$model_pval))
+approx$batch_pval<-p.adjust( approx$batch_pval, method= "BH",n = length( approx$batch_pval))
+approx$sex_pval<-p.adjust( approx$sex_pval, method = "BH",n = length( approx$sex_pval))
+#### we can also try any other p.val adjust ment just to check if you like 
+##duniya mein jitna correction method hoga utna lele
+#approx$model_p.adj_homel<-p.adjust( approx$pval, method = "hommel",n = length( approx$pval ) )
+#approx$$model_p.adj_homel<-p.adjust( approx$pval, method = "bonferroni",n = length( approx$pval ) )
+print(i)
+}
+###select significant gene from the model that we fitted now 
+##select p.adj as your interest 
+
+final_gene<-subset(approx,model_p.adj<0.1)
+
+###now you can annotate your gene that you select and get entrezid, put in edgre R 
+library(edgeR)
+tr<-rownames(final_gene)
+###get the entrez gene from ensebmle
+rownames(final_gene) <- as.character(mget(rownames(final_gene),org.Hs.egENSEMBL2EG,ifnotfound=NA))
+keg <- kegga(tr, species="Hs")
+###we need only up regulated pathways so we write "up", n=10 we need top 10
+final<- topKEGG(keg, n=10, truncate=34, sort="up")
+##plot them based on pvale
+write.csv(final,file="keegpathway.csv")
+#####plot in heatmap 
+##put your code according to your column
+a<-read.delim("keegpathway.csv",sep=",",header=T)
+p<-ggplot(data=,aes(reorder(x=X,-log10(P.Up)),y=-log10(P.Up )))+ coord_flip() +geom_bar(colour="black", stat="identity",width=.3)+theme_minimal()+ylab(expression(paste('-log10',italic(q),'value')))+ggtitle("Up_GOTerm EvsL")
+p <- p + xlab("Keegpathway")+theme(axis.text = element_text(size =13),axis.title=element_text(size=13))+theme(axis.ticks = element_line(size = 2))
+p<-p+theme(axis.title.x = element_text(face="bold",size=13))
+p
+dev.off()
+
+
+
+
+
+##extact all stat value 
+
+#library(broom)
+##to check summary 
+#tidy(fit1)
+###to check f-stat
+#glance(fit1)
+###to get p-vlaue
+#glance(fit1)$p.value
 
 
