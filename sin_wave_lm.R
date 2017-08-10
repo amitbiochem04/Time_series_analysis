@@ -430,4 +430,4 @@ dev.off()
 ###to get p-vlaue
 #glance(fit1)$p.value
 
-
+https://www.nature.com/ng/journal/v32/n4s/pdf/ng1032.pdf
