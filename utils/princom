@@ -1,0 +1,20 @@
+##this is one of doing 
+###here you should add your matrix in my.mat form 
+###since you need gene based reponse not the sample based response
+##here you can go like this 
+#pca.object <- prcomp(my.mat,center=TRUE,scale.=TRUE)
+
+pca.object <- prcomp(t(my.mat))
+summary(pca.object)
+par(mfrow=c(1,2))
+plot(pca.object)
+biplot(pca.object)
+#The Rotation
+#pca.object$rotation
+###here select top 2000 or 3000 gene 
+topN <-2000
+load.rot <- pca.object$rotation
+idx<-names(load.rot[,1][order(abs(load.rot[,1]),decreasing=TRUE)][1:topN])
+##this will give 3000 top gene 
+##you still need to check 
+final<-mymat[idx,]
