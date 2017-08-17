@@ -1,0 +1,19 @@
+mymat<-as.matrix(cnts.norm[!grepl('NA', rownames(cnts.norm)), ])
+p5 <- labdsv::pca(t(mymat),dim=4,cor=F)
+mysum <- summary(p5)
+plot(p5$score[,1:2],pch=19,ylab=paste("PC2 (",round(100*mysum[2,2],2),"%)",sep=""),type="n", xlab=paste("PC1 (",round(100*mysum[2,1],2),"%)",sep=""))
+loads <- as.data.frame(p5$loadings[,1:2])
+loads$sym <- as.character(mget(rownames(loads),org.Dr.egSYMBOL))
+loads$len <- sqrt(loads[,1]^2+loads[,2]^2)
+loads <- loads[order(abs(loads[,4]),decreasing=T),]
+num <- 10
+arrows(0,0,200*loads[1:num,1],200*loads[1:num,2],col="grey",length=0.)
+text(200*loads[1:num,1],200*loads[1:num,2],loads[1:num,3],cex=0.5,col="blue")
+text(p5$score[,1],p5$score[,2],rownames(p5$score),pos=3)
+lines(p5$score[1:17,1],p5$score[1:17,2],col="red",type="o",pch=19)
+########PCA plot with rlog transformation from DESeq2
+CairoPDF(file="Samaple_PCA",width=10/1.54,height=10/1.54)
+rld <- rlogTransformation(DESeq2Table, blind=T)
+plotPCA(rld, intgroup=c("condition"))
+dev.off()
+
