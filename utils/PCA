@@ -17,3 +17,10 @@ rld <- rlogTransformation(DESeq2Table, blind=T)
 plotPCA(rld, intgroup=c("condition"))
 dev.off()
 
+
+
+zscore<- function(amit){
+  z<- (amit - mean(amit)) / sd(amit)
+  return(z)
+}
+z.trans<- zscore(data$rpkm)
