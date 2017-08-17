@@ -1,0 +1,32 @@
+
+zscor<- function(x){
+  z<- (x - mean(x)) / sd(x)
+return(z)
+###calculate z score 
+  zscor(test)
+  ##caluculate pvalue
+  #approx <- as.data.frame( mat.or.vec( nrow( tt), 5))
+  #pval<-as.vector(c())
+  ###calculate standard deviation
+  sd <- apply (tt, 2, sd, na.rm=T)
+  ##calulate mean
+  mn<- apply(tt, 2, mean, na.rm=T)
+  xhead=names(tt)        # column names
+  xhead <- nrow(tt)         # number of lines (genes)
+  p <- ncol(tt)
+  z<-tt
+  P.value<-tt#as.vector(c())
+  E.value<-tt#as.vector(c())
+ 
+for (i in 1:p){
+ z[,i]<-(z[,i] - mn[i])/sd[i]  #zscore
+ P.value[,i] <- pnorm(abs(z[,i]),lower.tail=F)     # P-values 
+ E.value[,i] = P.value[,i] * n		      # E-value
+ #print(i)
+    }
+  z=format(z,digits=4) 
+  P.value=format(P.value,digits=4) 
+  E.value=format(E.value,digits=4) #
+  final<-as.data.frame(cbind(z, P.value,  E.value)) 
+
+  
