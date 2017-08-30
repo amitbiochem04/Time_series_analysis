@@ -55,7 +55,21 @@ maintable <- hwrite( ressig,
                      onmouseout="this.bgColor='white'", bgcolor='white')
 hwrite(maintable, page="differential regulated gene table.html")
 
-
+#####html javascript
+<script type="text/javascript">
+  var row = document.getElementsByTagName('tr');
+var main_url = 'http://fungidb.org/fungidb/app/record/gene/';
+for(i = 2; i < row.length; i++)
+{
+  td_last = row[i].lastElementChild;
+  gene_name = td_last.textContent
+  row[i].lastElementChild.textContent = '';
+  gene_url = main_url + gene_name;
+  var a_link = document.createElement('a');
+  a_link.href = gene_url;
+  a_link.text = gene_name;
+ row[i].lastElementChild.appendChild(a_link);
+}
 
 
 ########extract html file in r 
