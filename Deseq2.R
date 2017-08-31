@@ -24,6 +24,14 @@ fullData <- estimateSizeFactors(fullData)
 norm<-counts(fullData, normalized=TRUE)
 ###save normalized data
 save(fullData,file="fullData.rda")
+#########plot distance matrix 
+#sampleDists <- dist(t(log2(norm+1)))
+#sampleDistMatrix <- as.matrix(sampleDists)
+#rownames(sampleDistMatrix)<-paste(colnames(norm), sep="-")
+#CairoPDF(file="samaple_cluster",width=15/1.54,height=15/1.54)
+#pheatmap(sampleDistMatrix, cluster_col=F,cluster_row=F)
+#dev.off()
+
 #####contrast between light and dark 
 dds <- fullData[,fullData$samplelabel=="dl-wt" & fullData$time %in% c(4,6,8,10,11.5)]
 design(dds) <- ~ condition
