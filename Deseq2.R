@@ -32,6 +32,32 @@ save(fullData,file="fullData.rda")
 #pheatmap(sampleDistMatrix, cluster_col=F,cluster_row=F)
 #dev.off()
 
+CairoPDF(file="samaple_PCA",width=10/1.54,height=10/1.54)
+
+####
+#mymat<-as.matrix(cnts.norm[!grepl('NA', rownames(cnts.norm)), ])
+#p5 <- labdsv::pca(t(mymat),dim=4,cor=F)
+#mysum <- summary(p5)
+#plot(p5$score[,1:2],pch=19,ylab=paste("PC2 (",round(100*mysum[2,2],2),"%)",sep=""),type="n", xlab=paste("PC1 (",round(100*mysum[2,1],2),"%)",sep=""))
+#loads <- as.data.frame(p5$loadings[,1:2])
+#loads$sym<-rownames(loads)
+#loads$len <- sqrt(loads[,1]^2+loads[,2]^2)
+#loads <- loads[order(abs(loads[,4]),decreasing=T),]
+#num <- 5
+#arrows(0,0,200*loads[1:num,1],200*loads[1:num,2],col="grey",length=1)
+#text(200*loads[1:num,1],200*loads[1:num,2],loads[1:num,3],cex=0.5,col="blue")
+#text(p5$score[,1],p5$score[,2],rownames(p5$score),pos=3)
+#lines(p5$score[1:14,1],p5$score[1:14,2],col="red",type="o",pch=19)
+#lines(p5$score[15:28,1],p5$score[15:28,2],col="green",type="o",pch=19)
+#lines(p5$score[29:41,1],p5$score[29:41,2],col="blue",type="o",pch=19)
+#lines(p5$score[42:54,1],p5$score[42:54,2],col="black",type="o",pch=19)
+#lines(p5$score[54:60,1],p5$score[54:60,2],col="yellow",type="o",pch=19)
+#legend("topleft",c("WT","DFrq","D_rep1","Drep2","Drep3"),fill=c("red","green","blue","black","yellow"),inset=0.02)
+#write.xlsx(data.frame(loads), "pca_load.xlsx")
+#dev.off()
+
+
+
 #####contrast between light and dark 
 dds <- fullData[,fullData$samplelabel=="dl-wt" & fullData$time %in% c(4,6,8,10,11.5)]
 design(dds) <- ~ condition
