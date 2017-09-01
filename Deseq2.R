@@ -55,7 +55,10 @@ CairoPDF(file="samaple_PCA",width=10/1.54,height=10/1.54)
 #legend("topleft",c("WT","DFrq","D_rep1","Drep2","Drep3"),fill=c("red","green","blue","black","yellow"),inset=0.02)
 #write.xlsx(data.frame(loads), "pca_load.xlsx")
 #dev.off()
-
+###simple plot 
+##plot(p5$scores[, 1], p5$scores[, 2])
+#text(p5$scores[, 1], p5$scores[, 2], labels=rownames(p5$scores), cex= 0.7)
+ 
 
 
 #####contrast between light and dark 
