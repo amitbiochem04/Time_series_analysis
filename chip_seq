@@ -1,0 +1,310 @@
+####gtffile 
+
+flexbar -r wcc_tap_1.fastq -t wcc_tap_1_trimmed -z GZ -m 30 -a Adapter.fa
+flexbar -r wcc_tap_1.fastq -t wcc_tap_1_trimmed -z GZ -m 30 -a adapter.fa
+
+bowtie2 -p 4 -x /Users/amit/Desktop/genome/neurospora_crassa_bowtie_index -sensitive-local -U _2_sequence_wt.fastq -S s_2_sequence_wt_test.sam
+#bowtie2 -p 4 -x /Users/amit/Desktop/genome/neurospora_crassa_bowtie_index --sensitive-local --trim5 6 -U s_2_sequence_wt.fastq -S s_2_sequence_wt_trim.sam 
+bowtie2 -p 4 -x /Users/amit/Desktop/genome/neurospora_crassa_bowtie_index --sensitive-local -U wcc_tap_0_trimmed.fastq.gz -S wcc_tap_0_trimmed.sam
+bowtie2 -p 4 -x /Users/amit/Desktop/genome/neurospora_crassa_bowtie_index --sensitive-local -U wcc_tap_1_trimmed.fastq.gz -S wcc_tap_1_trimmed.sam
+bowtie2 -p 4 -x /Users/amit/Desktop/genome/neurospora_crassa_bowtie_index --sensitive-local -U wcc_tap_30_trimmed.fastq.gz -S wcc_tap_30_trimmed.sam
+
+samtools view -bS wcc_tap_0_trimmed.sam > wcc_tap_0_trimmed.bam
+samtools sort wcc_tap_0_trimmed.bam >wcc_tap_0_trimmed_sort.bam
+samtools index wcc_tap_0_trimmed_sort.bam
+samtools flagstat wcc_tap_0_trimmed.sam
+#bedtools bamtobed -i s_6_sequence_GTR__csp_sort.bam >s_6_sequence_GTR__csp_sort.bed
+bamCoverage -b wcc_tap_0_trimmed_sort.bam -o wcc_tap_0_trimmed_sort.bigWig
+
+
+
+samtools view -bS wcc_tap_1_trimmed.sam > wcc_tap_1_trimmed.bam
+samtools sort wcc_tap_1_trimmed.bam >wcc_tap_1_trimmed_sort.bam
+samtools index wcc_tap_1_trimmed_sort.bam
+#samtools flagstat wcc_tap_0_trimmed.sam
+#bedtools bamtobed -i s_6_sequence_GTR__csp_sort.bam >s_6_sequence_GTR__csp_sort.bed
+bamCoverage -b wcc_tap_1_trimmed_sort.bam -o wcc_tap_1_trimmed_sort.bigWig
+
+samtools view -bS wcc_tap_1_trimmed.sam > wcc_tap_1_trimmed.bam
+samtools sort wcc_tap_1_trimmed.bam >wcc_tap_1_trimmed_sort.bam
+samtools index wcc_tap_1_trimmed_sort.bam
+#samtools flagstat wcc_tap_0_trimmed.sam
+#bedtools bamtobed -i s_6_sequence_GTR__csp_sort.bam >s_6_sequence_GTR__csp_sort.bed
+bamCoverage -b wcc_tap_1_trimmed_sort.bam -o wcc_tap_1_trimmed_sort.bigWig
+
+
+
+samtools view -bS wcc_tap_30_trimmed.sam > wcc_tap_30_trimmed.bam
+samtools sort wcc_tap_30_trimmed.bam >wcc_tap_30_trimmed_sort.bam
+samtools index wcc_tap_30_trimmed_sort.bam
+bamCoverage -b wcc_tap_30_trimmed_sort.bam -o wcc_tap_30_trimmed_sort.bigWig
+
+####read normalization before calling peak by Read coverage normalization options by deeptools..
+##Report read coverage normalized to 1x sequencing depth (also known as Reads Per Genomic Content (RPGC)). 
+#Sequencing depth is defined as: (total number of mapped reads * fragment length) / effective genome size. 
+#The scaling factor used is the inverse of the sequencing depth computed for the sample to match the 1x coverage.
+#To use this option, the effective genome size has to be indicated after the option. 
+#The effective genome size is the portion of the genome that is mappable. 
+#Large fractions of the genome are stretches of NNNN that should be discarded. 
+#Also, if repetitive regions were not included in the mapping of reads, the effective genome size needs to be adjusted accordingl
+##bamCoverage -bl CSP1_chip_ana_peaks.bed -o  CSP1_chip_ana_peaks.bigWig
+##when you have a control and treatment 
+### macs14 -t SRR576933.sam -c SRR576938.sam --format SAM  --gsize 4639675 --name "macs14"  --bw 400 --keep-dup 1 --bdg --single-profile --diag &> MACS.out
+macs14 -t s_7_sequence_RCO1_sort.bam -f BAM -g 4.1e7 -n rco1_test --keep-dup 1 -p 0.01 --single-profile --diag &> MACS.out
+macs14 -t  s_6_sequence_GTR__csp_sort.bam -f BAM -g 4.1e7 -n CSP1_test --keep-dup 1 -p 0.01 --single-profile --diag &> MACS1.out
+#macs2 -t s_7_sequence_RCO1_sort.bam -f BAM -g 4.1e7 -n rco1_test --keep-dup 1 -p 0.01 --single-profile --diag &> MACS.out
+#macs2 callpeak -t SRR446029_1.fastq_trim.gz_A1.bam -c SRR446027_1.fastq_trim.gz_M1.bam -n SRR446029_1.fastq_trim.gz_A1.bam_macs2 -f BAM -g 1.2e8 -B -q 0.01 --nomodel
+macs14 -t wcc_tap_0_trimmed_sort.bam  -f BAM -g 4.1e7 -n  wcc_tap_0_trimmed --keep-dup 1 -p 1e-6 --single-profile --diag &> MACS1.out
+macs14 -t wcc_tap_1_trimmed_sort.bam  -f BAM -g 4.1e7 -n  wcc_tap_1_trimmed --keep-dup 1 -p 1e-6 --single-profile --diag &> MACS2.out
+macs14 -t wcc_tap_30_trimmed_sort.bam -f BAM -g 4.1e7 -n wcc_tap_30_trimmed --keep-dup 1 -p 1e-8 --single-profile --diag &> MACS2.out
+
+
+macs14 -t wcc_tap_1_trimmed_sort.bam -c wcc_tap_0_trimmed_sort.bam -f BAM -g 4.1e7 -n wcc_tap_0t_1t_trimmed --keep-dup 1 -p 1e-6 --single-profile --diag &> MACS3.out
+macs14 -t wcc_tap_30_trimmed_sort.bam -c wcc_tap_0_trimmed_sort.bam -f BAM -g 4.1e7 -n wcc_tap_0t_30t_trimmed --keep-dup 1 -p 1e-6 --single-profile --diag &> MACS4.out
+
+##compare tow bed peak file in
+bedtools intersect -a exp1.bed -b exp2.bed -f 0.50 -r > both.bed
+findMotifsGenome.pl CSP1_chip_ana_peaks.bed  ~/Desktop/genome/Neurospora_crassa.NC12.dna.toplevel.fa OutputResults/
+####anotate peak by homer 
+annotatePeaks.pl CSP1_chip_ana_peaks.bed ~/Desktop/genome/Neurospora_crassa.NC12.dna.toplevel.fa -gtf ~/Desktop/genome/Neurospora_crassa.NC12.34.gtf -gid >CSP1_peaks_annotate-gid.xls 
+
+library(GenomicRanges)
+library(rtracklayer)
+library(IRanges)
+library('ShortRead')
+setwd("/Users/amit/Desktop/Axel/csp1_ana/")
+###load macs12 peak file..
+#input = import.bed("CSP1_chip_ana_peaks.bed")
+input1<-read.delim("/Users/amit/Desktop/Axel/csp1_ana/CSP1_peaks_annotate-gid.csv",header=T,sep=",")
+input1<-input1[c(3:10)]
+#input1<-input[,c(1:6,8,10:11)]
+#write.csv(input1,file="CSP1_peaks_annotate-gid.csv")
+####make gr object 
+#gr2 <- as(input1, "GRanges")
+
+####duplications
+##table(input1$Nearest.PromoterID)
+input1[length(unique(input1$Nearest.PromoterID)),]
+idx<-which(duplicated(input1$Nearest.PromoterID))
+final<-input1[idx,]
+rownames(final)<-final$Nearest.PromoterID
+gene<-gtf[gtf$type=="gene"][mcols(gtf[gtf$type=="gene"])[[5]] %in% final$Nearest.PromoterID,]
+
+
+####order the nucid 
+gtfd<-as.data.frame(gene)
+gtfd1<-gtfd[c(5,10)]
+rownames(gtfd1)<-gtfd1$gene_id
+final1 <- merge(final, gtfd1, by=0, all=TRUE)
+
+###creat grange object 
+
+bed<-GRanges(seqnames=final1$Chr,
+             ranges=IRanges(start=final1$Start,end= final1$End),
+             strand=final1$strand,
+             Peak_Score=final1$Peak.Score  ,
+             Annotation=final1$Annotation,
+             Distance_to_TSS=final1$Distance.to.TSS,
+             Nearest_PromoterID=final1$Nearest.PromoterID,
+             geneid=final1$gene_id)
+###import gtf file 
+gtf<-import("~/Desktop/genome/Neurospora_crassa.NC12.34.gtf")
+
+###extract start codon 
+Neurospora.fasta<-FaFile("~/Desktop/genome/Neurospora_crassa.NC12.dna.toplevel.fa")
+#seq<-flank(gene,width = 1500,both = TRUE)
+seq<-flank(bed, 2)
+selected_gene<-getSeq(x = Neurospora.fasta, param = seq)
+names(selected_gene)<-mcols(seq)[[5]]
+writeFasta(selected_gene, file="sleceted_gene_seq.fa")
+writeFasta(selected_gene, file="sleceted_gene_seq.txt")
+######plot with peak range object 
+Rle.csp1<-import("/Users/amit/Desktop/Axel/csp1_ana/s_6_sequence_GTR__csp_sort.ChIP.bw",as="Rle")
+csp1.Profiles<-S4Vectors::runmean(Rle.csp1,101,endrule ="constant")
+
+csp1.Profiles<-csp1.Profiles[bed]
+for (i in 1:length(csp1.Profiles)){
+  if(as.vector(strand(bed))[i]=="-"){
+    csp1.Profiles[[i]]<-rev(csp1.Profiles[[i]])
+  }
+}
+####plot 
+#csp1.Profiles.smooth<-S4Vectors::runmean(csp1.Profiles,101,endrule ="constant")
+setwd("/Users/amit/Desktop/Axel/images")
+for(i in 1:length(csp1.Profiles)) {
+  png(file = paste(mcols(bed)[[4]][i],".png",sep=""))
+  plot(csp1.Profiles[[i]],type="l",xlab="Base",ylab="Reads",main=mcols(bed)[[4]][i])
+  if((length(csp1.Profiles[[i]])/2)-(mcols(bed)[[3]][i])<=length(csp1.Profiles[[i]]) & 
+     (length(csp1.Profiles[[i]])/2)-(mcols(bed)[[3]][i])>0){
+  points(x=(length(csp1.Profiles[[i]])/2)-(mcols(bed)[[3]][i]),
+         y=csp1.Profiles[[i]][(length(csp1.Profiles[[i]])/2)-(mcols(bed)[[3]][i])],
+         col="red",pch=16)
+    lines(x=c((length(csp1.Profiles[[i]])/2)-(mcols(bed)[[3]][i]),
+              (length(csp1.Profiles[[i]])/2)-(mcols(bed)[[3]][i])),
+          y=c(-50000000,5000000000000),
+           col="red",lty=3)
+        }
+     #axis(side = 1,at = (length(csp1.Profiles.smooth[[i]])/2)-(mcols(bed)[[3]][i]),labels = "TSS")
+    dev.off()
+}
+
+
+setwd("/Users/amit/Desktop/Axel/")
+library( hwriter )
+page <- openPage( "open.html",
+                  head = paste( sep="\n",
+                                "<script>",
+                                "   function set_image( name ) {",
+                                "      document.getElementById( 'plot' ).setAttribute( 'src', 'images/' + name + '.png' );",
+                                "   }",
+                                "</script>" ) )
+cat(file=page,
+    '<table><tr><td style="vertical-align:top"><div style="height:700px; overflow-y:scroll">' )
+#####
+hwrite(final1, border=NULL, page=page,
+       onmouseover = sprintf( "set_image( '%s' );", final1$Nearest.PromoterID  ) )
+cat( file=page,
+     '</div></td><td style="vertical-align:top"><img id="plot" width="700px"></td></tr></table>' )
+closePage(page)
+browseURL( "open.html" )
+
+#plotfiles <- paste0( input1$Nearest_PromoterID, ".png" )
+#input1$plot <-hwriteImage(plotfiles, height="700px", table=FALSE, link = plotfiles )
+
+#maintable <- hwrite( input1, 
+ #                    table.style = "border-collapse: collapse;",
+  #                   cellpadding = 5,row.bgcolor='#ffdc98',
+   #                  center=TRUE,onmouseover="this.bgColor='#ffaaaa'", 
+    #                 onmouseout="this.bgColor='white'", bgcolor='white')
+#hwrite(maintable, page="differential regulated gene table.html")
+#browseURL( "differential regulated gene table.html" )
+
+
+<script type="text/javascript">
+  var row = document.getElementsByTagName('tr');
+var main_url = 'http://fungidb.org/fungidb/app/record/gene/';
+for(i = 2; i < row.length; i++)
+{
+  td_last = row[i].lastElementChild;
+  gene_name = td_last.textContent
+  row[i].lastElementChild.textContent = '';
+  gene_url = main_url + gene_name;
+  var a_link = document.createElement('a');
+  a_link.href = gene_url;
+  a_link.text = gene_name;
+ row[i].lastElementChild.appendChild(a_link);
+}
+#</script>
+#</body>
+###
+
+<script type="text/javascript">
+  var row = document.getElementsByTagName('tr');
+var main_url = 'http://fungidb.org/fungidb/app/record/gene/';
+for(i = 2; i < row.length; i++)
+{
+  td_first = row[i].firstElementChild;
+  gene_name = td_first.textContent
+  row[i].firstElementChild.textContent = '';
+  gene_url = main_url + gene_name;
+  var a_link = document.createElement('a');
+  a_link.href = gene_url;
+  a_link.text = gene_name;
+  row[i].firstElementChild.appendChild(a_link);
+}
+</script>
+  </body>
+  ##########
+library('ShortRead')
+library('rtracklayer')
+f.filename<-dir(pattern="*_sort.bam$")
+f.savename<-sub(".bam","",f.filename)
+cbind(f.filename,f.savename)
+f.shift=0
+for ( i in 1:length(f.filename)){ 
+gc()
+flag<-scanBamFlag(isMinusStrand=FALSE)
+param<-ScanBamParam(flag= flag)
+bam.fw<-readGAlignments(f.filename[i], index=f.filename[i], param=param, use.names=TRUE)
+grg.fw<-granges(bam.fw)                           # changing GAlignments to GRanges (no metadata inf, but can be added if we need)
+rm(bam.fw)
+cov.fw<-coverage(grg.fw, shift=f.shift)
+seqinfo(cov.fw)<-seqinfo(grg.fw)
+flag<-scanBamFlag(isMinusStrand=TRUE)
+param<-ScanBamParam(flag= flag)
+bam.rev<-readGAlignments(f.filename[i], index=f.filename[i], param=param, use.names=TRUE)
+grg.rev<-granges(bam.rev)                           # changing GAlignments to GRanges (no metadata inf, but can be added if we need)
+rm(bam.rev)
+cov.rev<-coverage(grg.rev, shift=-f.shift)
+seqinfo(cov.rev)<-seqinfo(grg.rev)
+Rle.data<-cov.fw+cov.rev
+seqinfo(Rle.data)<-seqinfo(cov.rev)
+export(Rle.data, paste(f.savename[i],".ChIP.bw",sep=""),format="bw") 
+gc()
+}
+######reasd Rle
+##NCU02265 frq
+##NCU03967 vvd
+Rle.rco1<-import("/Users/amit/Desktop/Axel/csp1_ana/s_7_sequence_RCO1_sort.ChIP.bw",as="Rle")
+a<-c("NCU02265","NCU03967")
+gtf<-import("~/Desktop/genome/Neurospora_crassa.NC12.34.gtf")
+Rle.data1<-import("~/Desktop/Axel/RNApolII_Ser5P_35.ChIP.bw",as="Rle") 
+#Rle.data[seq]
+#lapply(X = (Rle.data[seq]),FUN = plot,type="l",ylab="Readcount",xlab="Bases")
+Random.Ser5.Profiles<-Rle.data1[last]
+for (i in 1:length(Random.Ser5.Profiles)){
+  if(as.vector(strand(last))[i]=="-"){
+ Random.Ser5.Profiles[[i]]<-rev(Random.Ser5.Profiles[[i]])
+  }
+}
+Random.NT.Profiles<-Rle.data[last]
+for (i in 1:length(Random.NT.Profiles)){
+  if(as.vector(strand(last))[i]=="-"){
+    Random.NT.Profiles[[i]]<-rev(Random.NT.Profiles[[i]])
+  }
+}
+######
+#smoothening with running window average:
+##Nucl.turnover.runwindow<-function(f.filename, f.savename, WindowWidth=15){
+#f.filename = Bigwig file to smoothen by runing window average
+#f.savename = save file name
+#WindowWidth = the size of the running window. Must be an uneven number.
+#Data<-import(f.filename,as="RleList")
+Random.NT.smooth<-S4Vectors::runmean(Random.NT.Profiles,101,endrule ="constant")
+Random.Ser5.smooth<-S4Vectors::runmean(Random.Ser5.Profiles,101,endrule ="constant")
+for(i in 1:length( Random.NT.smooth)) {
+pdf(file = paste(names(last)[i],".plo2profile.pdf",sep=""))
+plot( Random.NT.smooth[[i]],type="l",xlab="Base",ylab="Reads",main=names(last)[i],
+axes=F,lwd=5,ylim=c(0,max(c( Random.NT.smooth[[i]],Random.Ser5.smooth[[i]]))))
+axis(side=1,at=c("0","1500", length(Random.NT.smooth[[i]])-1500, length(Random.NT.smooth[[i]])),labels=c("-1500","TSS","ATG","+1500"))
+axis(side=2)
+lines(Random.Ser5.smooth[[i]],type="l",col="red",lwd=5)
+legend("topleft",c("RNApolII_NT_35","RNApolII_Ser5P_35"),fill=c("black","red"))
+#textxy(df$dese2, df$qpcr, labs=df$gene_name, cex=1)
+
+dev.off()
+} 
+s <- "AAAACCCGGT"
+cnt <- gccount(s)
+sum(cnt)
+cnt <- gccount(s)
+restrict(x, start=gene_tra, end=sep, keep.all.ranges=FALSE,
+         use.names=TRUE)
+####fungi = useMart(biomart="fungal_mart",host="fungi.ensembl.org",dataset="NC12")
+fungi = useMart(biomart="ENSEMBL_MART_ENSEMBL",host="fungi.ensembl.org",dataset="ncrassa_eg_gene")
+ensembl_id="NCU15815"
+gb <-getBM(attributes=c("ensembl_gene_id","external_gene_name"),filters = "ensembl_gene_id", values=ensembl_id, mart=fungi)  
+attributes <- listAttributes(fungi)
+head(attributes)
+utr <- getSequence("NCU15815", type="ensembl_gene_id", seqType="3utr", mart=fungi)
+outfile <- file("d2-d4_up_3utr.fa", "w")
+for (i in 1:nrow(utr)) {
+  h = paste(c(">", utr[i,2]), collapse="")
+  writeLines(h, outfile)
+  writeLines(utr[i,1], outfile)
+}
+close(outfile)
+###load("NC12.Start.Codons.Coordinates.rdat")
+a<-read.delim("gene.txt",header=T,sep=",")
+gene<-gtf[gtf$type=="gene"][mcols(gtf[gtf$type=="gene"])[[5]] %in% input1$Nearest_PromoterID,]
+
