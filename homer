@@ -1,0 +1,9 @@
+
+#####scan known motif using custom fasta file and stored in a bed file. 
+scanMotifGenomeWide.pl CTCF_output.motif ~/Desktop/genome/Neurospora_crassa.NC12.dna.toplevel.fa -bed > jasper.bed
+##creat own motif file from sequnce
+## here number 1 is one mismatch allow 
+seq2profile.pl ATCGTCT 1 ets > CTCF_output.motif
+###annote peak from bed file 
+annotatePeaks.pl jasper_mod.bed ~/Desktop/genome/Neurospora_crassa.NC12.dna.toplevel.fa -gtf ~/Desktop/genome/Neurospora_crassa.NC12.34.gtf -gid >jasper_annotate-gid.xls 
+
