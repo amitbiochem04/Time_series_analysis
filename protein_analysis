@@ -7,7 +7,9 @@ keep<-list()
 for ( i in unique(final1$band)) {
   #id<-grep( "^i$"  ,final1$band,fixed=F)
   #id<-grep(get("i"),final1$band,fixed=F)
+  
   id<-grep(paste0('^', i, '$'),final1$band)
+  
   test<-final1[id,]
   fn<-ecdf(as.numeric(test$`Score/RNA_count_DL`))
   test$lastprcnt<-fn(test$`Score/RNA_count_DL`)*100
@@ -27,4 +29,7 @@ df<-rbind(keep1,keep2,keep3,keep4,keep5,
           keep21,keep22,keep23,keep24,
           keep25,keep26,keep27,keep28,keep29,
           keep30,keep31,keep32,keep33,keep34,keep35,keep36)
-          
+
+final<-df[,c(1:5,8,6,7)]
+colnames(final)<-c("band","Mass","Score","Norm_RNA_count","Norm_protein_score","Percenatile","Ascension.NC12","Description")
+write.xlsx(final,file="last_file.xlsx",asTable = TRUE)
