@@ -20,6 +20,9 @@ for ( i in unique(final1$band)) {
 ##final df
 library(dplyr)
 df <- as.data.frame(bind_rows(keep))
+####or 
+df<-dplyr::bind_rows(keep)
+####
 final<-df[,c(1:5,8,6,7)]
 colnames(final)<-c("band","Mass","Score","Norm_RNA_count","Norm_protein_score","Percenatile","Ascension.NC12","Description")
 write.xlsx(final,file="last_file.xlsx",asTable = TRUE)
