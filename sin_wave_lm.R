@@ -19,6 +19,14 @@ approx$p.adj<-p.adjust( approx$pval, method = "BH",n = length( approx$pval))
 print(i)
 }
 ###
+#####
+antilog<-function(lx,base)
+{
+    lbx<-lx/log(exp(1),base=base)
+    result<-exp(lbx)
+    result
+} 
+#######
 sig<- subset( approx,p.adj< 0.1)
 sig<-sig[ order( sig[,"p.adj"] ), ]
 
