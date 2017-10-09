@@ -8,7 +8,7 @@ amplitute <- as.vector(c())
 phase <- as.vector(c())
 for( i in 1:nrow( data) ){
 y <- as.numeric( data[ i,1:12 ])
-fit1 <- lm( y ~ x + cos( x/22*2*pi ) + sin( x/22*2*pi ) )
+fit1 <- lm( y ~ x + cos( x/24*2*pi ) + sin( x/24*2*pi ) )
 fit0 <- lm( y ~ x )
 amplitute[i]<- sqrt( coef(fit1)[3]^2 + coef(fit1)[4]^2 )
 phase[i]<- -atan2( coef(fit1)[4], coef( fit1)[3] )
