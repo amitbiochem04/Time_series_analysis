@@ -1,0 +1,21 @@
+
+
+igvtools tdftobedgraph GSM1686128_H3K27me3_dim2_1850_ACAGTG_062314.tdf GSM1686128_H3K27me3_dim2_1850_ACAGTG_062314.bedgraph
+library(rtracklayer)
+setwd("/Users/amit/Desktop/michael_chipseq/")
+###for single 
+track<-import("GSM1932128_H3K27me2_H3K27me3_dim5_HT1_TGACCAAT_081415.bedgraph")
+b<-c("I", "II" ,"III","IV", "V", "VI","VII","supercont12.8" ,"supercont12.9","supercont12.10","supercont12.11", "supercont12.12","supercont12.13","supercont12.14", "supercont12.15", "supercont12.16",
+       +      "supercont12.17","supercont12.18","supercont12.19", "supercont12.20")
+seqlevels(track)<-b
+rtracklayer::export(track, "res.bedgraph")
+#######for all 
+a<-read.delim("name.txt",header=T)
+for (i in a$name){
+track<-import("GSM1932128_H3K27me2_H3K27me3_dim5_HT1_TGACCAAT_081415.bedgraph")
+b<-c("I", "II" ,"III","IV", "V", "VI","VII","supercont12.8" ,"supercont12.9","supercont12.10","supercont12.11", "supercont12.12","supercont12.13","supercont12.14", "supercont12.15", "supercont12.16",
+"supercont12.17","supercont12.18","supercont12.19", "supercont12.20")
+seqlevels(track)<-b
+rtracklayer::export(track, i)
+print(i)
+}
