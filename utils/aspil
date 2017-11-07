@@ -1,0 +1,35 @@
+library(ASpli)
+TxDb <- makeTxDbFromGFF(file="Neurospora_crassa.NC12.34.gtf",format="gtf")
+
+features <- binGenome(TxDb)
+
+GenesCoord <- featuresg(features)
+
+BinsCoord <- featuresb(features)
+
+JunctionsCoord <- featuresj(features)
+
+targets<-read.delim("design.txt",header=T,sep="\t",row.names=1)
+
+bam <- loadBAM(targets)
+
+counts <- readCounts(features, bam, l=100L, maxISize=5000)
+
+GeneCounts <- countsg(counts)
+
+GeneRd <- rdsg(counts)
+
+BinCounts <- countsb(counts)
+
+BinRd <- rdsb(counts)
+
+JunctionCounts <- countsj(counts)
+
+e1iCounts <- countse1i(counts)
+
+ie2Counts <- countsie2(counts)
+
+
+pair <- c("d0","d1")
+
+as <- AsDiscover(counts=counts, targets=targets, features=features, bam=bam, l=50L, pair=pair)
