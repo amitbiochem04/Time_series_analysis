@@ -1,0 +1,9 @@
+
+pdf('test_gene.pdf')
+p<- data.frame(colData(fullData),t(counts(fullData, normalized=TRUE)[rownames(final),]))[c(1:14,29:40),]%>%
+gather( "gene", "ncount", -(1:5) ) %>%
+ggplot + geom_line(aes( x=time, y=log2(ncount+1), col=samplelabel)) +facet_wrap(~gene)
+p<- p + xlab( "Time[h]") + ylab("Log2(count)+1") + theme_bw()
+p<-p+geom_point(aes(x=time,y=log2(ncount+1),col=samplelabel))
+facet_multiple(plot = p, facets = 'gene', ncol = 2, nrow = 2)
+dev.off()
