@@ -1,3 +1,24 @@
 Fastq Quality Read And Score Length Check
 
 awk '{if(NR%4==0) print NR"\t"$0"\t"length($0)}' file.fastq > qualityLength
+awk 'NR==FNR{a[$3]++;next}!a[$3]' readLength qualityLength
+
+### Illumina Fastq Is Single Or Paired End With Minimal Sequence Id
+grep @HWUSI-EAS100R readfile.fq | head -100000  | sort | uniq -c | sort -rgk 1,1 | head
+
+
+R1.fastq :
+
+@M00991:61:000000000-A7EML:1:1101:14011:1001 1:N:0:28
+NGCTCCTAGGTCGGCATGATGGGGGAAGGAGAGCATGGGAAGAAATGAGAGAGTAGCAA
++
+#8BCCGGGGGFEFECFGGGGGGGGG@;FFGGGEG@FF<EE<@FFC,CEGCCGGFF<FGF
+
+R2.fastq :
+
+@M00991:61:000000000-A7EML:1:1101:14011:1001 2:N:0:28
+TTGCTACTCTCTCATTTCTTCCCATGCCTTCCTTCCCCCATCATGCCGACCTAGGAGCC
++
+CCCCC,;FF,EA9CEE<6CFAFGGGD@,,6CC<FA@FG:FF8@F9EE7@FGCFGFFFFG
+
+#####Fastq Splitter For Paired End Reads
