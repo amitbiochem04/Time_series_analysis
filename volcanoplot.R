@@ -1,3 +1,5 @@
+https://www.biostars.org/p/214100/
+
 # Make a basic volcano plot
 with(res, plot(log2FoldChange, -log10(pvalue), pch=20, main="Volcano plot", xlim=c(-2.5,2)))
 
