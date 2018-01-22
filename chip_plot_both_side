@@ -5,7 +5,7 @@ igvtools tdftobedgraph GSM1686146_H3K9me3_wt_CCGTCC_102214_s.tdf GSM1686146_H3K9
 ###then conver nc12 file to proper visulazion format
 library(rtracklayer)
 library('ShortRead')
-setwd("/Users/amit/Desktop/michael_chipseq/")
+setwd("~/Desktop/michael_chipseq/")
 ###for single 
 track<-import("GSM1686146_H3K9me3_wt_CCGTCC_102214_s.bedgraph")
 b<-c("I", "II" ,"III","IV", "V", "VI","VII","supercont12.8" ,"supercont12.9","supercont12.10","supercont12.11", "supercont12.12","supercont12.13","supercont12.14", "supercont12.15", "supercont12.16",
@@ -25,13 +25,13 @@ H3K27me3<-coverage(track,weight = mcols(track)[[1]])
 save(H3K27me3,file="H3K27me3.rda")
 
 ########load serplo2 data get alignment
-bowtie2 -p 4 -x /Users/amit/Desktop/genome/neurospora_crassa_bowtie_index -sensitive-local -U C3K04ACXX_S2_35_sequence.fastq -S C3K04ACXX_S2_35_sequence.sam
+bowtie2 -p 4 -x ~/Desktop/genome/neurospora_crassa_bowtie_index -sensitive-local -U C3K04ACXX_S2_35_sequence.fastq -S C3K04ACXX_S2_35_sequence.sam
 samtools view -bS C3K04ACXX_S2_35_sequence.sam > C3K04ACXX_S2_35_sequence.bam
 samtools sort C3K04ACXX_S2_35_sequence.bam >C3K04ACXX_S2_35_sequence_sort.bam
 samtools index C3K04ACXX_S2_35_sequence_sort.bam
 
 ####
- htseq-count -f bam -m intersection-nonempty -r pos --type=exon --idattr=gene_id --stranded=reverse C3K04ACXX_S2_35_sequence_sort.bam /Users/amit/Desktop/genome/Neurospora_crassa.NC12.34.gtf >serplo2_35min.txt
+ htseq-count -f bam -m intersection-nonempty -r pos --type=exon --idattr=gene_id --stranded=reverse C3K04ACXX_S2_35_sequence_sort.bam ~/Desktop/genome/Neurospora_crassa.NC12.34.gtf >serplo2_35min.txt
 
 gtf<-import("~/Desktop/genome/Neurospora_crassa.NC12.34.gtf")
 ###extract start codon
@@ -61,7 +61,7 @@ names(bed)<-mcols(bed)[[5]]
 
 
 ######plot with peak range object
-#Rle.H3K27me3<-import("/Users/amit/Desktop/michael_chipseq/GSM1686139_H3K27me3_wt_CGTACG_102214_s.bedgraph_clear.bedgraph",as="Rle")
+#Rle.H3K27me3<-import("~/Desktop/michael_chipseq/GSM1686139_H3K27me3_wt_CGTACG_102214_s.bedgraph_clear.bedgraph",as="Rle")
 H3K27me3.Profiles<-H3K27me3
 #H3K27me3.Profiles<-S4Vectors::runmean(Rle.H3K27me3,101,endrule ="constant")
 H3K27me3.Profiles<-H3K27me3.Profiles[bed]
@@ -71,7 +71,7 @@ for (i in 1:length(H3K27me3.Profiles)){
     }
 }
 
-#Rle.H3K9me3<-import("/Users/amit/Desktop/michael_chipseq/  GSM1686146_H3K9me3_wt_CCGTCC_102214_s_clear.bedgraph",as="Rle")
+#Rle.H3K9me3<-import("~/Desktop/michael_chipseq/  GSM1686146_H3K9me3_wt_CCGTCC_102214_s_clear.bedgraph",as="Rle")
 H3K9me3.Profiles<-H3K9me3
 #H3K9me3.Profiles<-S4Vectors::runmean(Rle.H3K9me3,101,endrule ="constant")
 H3K9me3.Profiles<-H3K9me3.Profiles[bed]
