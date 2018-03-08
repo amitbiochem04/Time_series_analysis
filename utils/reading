@@ -20,4 +20,4 @@ kallisto index -i mouse_index_kalisto Mus_musculus.GRCm38.rna.fa.gz
 
 ##kallisto quant -i mouse_index_kalisto -o count -b 100 read1.fastq.gz read2.fastq.gz
 
-kallisto quant -i hsGRCh38_kallisto -t 16 -b 100 R1.fastq.gz R_2.fastq.gz -o mouse_count
+kallisto quant -i mouse_index_kalisto -t 16 -b 100 R1.fastq.gz R_2.fastq.gz -o mouse_count
