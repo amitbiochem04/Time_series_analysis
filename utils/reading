@@ -8,4 +8,16 @@ https://github.com/seandavi/awesome-single-cell
 https://github.com/LuyiTian/scPipe
 
 https://github.com/pachterlab/scRNA-Seq-TCC-prep
+
 https://chmi-sops.github.io/mydoc_kallisto.html
+
+ wget ftp://ftp.ensembl.org/pub/release-91/fasta/mus_musculus/ncrna/Mus_musculus.GRCm38.ncrna.fa.gz
+ wget ftp://ftp.ensembl.org/pub/release-91/fasta/mus_musculus/cdna/Mus_musculus.GRCm38.cdna.all.fa.gz
+ ###kalisto pipe line 
+cat Mus_musculus.GRCm38.cdna.all.fa.gz Mus_musculus.GRCm38.ncrna.fa.gz > Mus_musculus.GRCm38.rna.fa.gz
+kallisto index -i mouse_index_kalisto Mus_musculus.GRCm38.rna.fa.gz
+####quantification for paired end sequnce
+
+##kallisto quant -i mouse_index_kalisto -o count -b 100 read1.fastq.gz read2.fastq.gz
+
+kallisto quant -i hsGRCh38_kallisto -t 16 -b 100 R1.fastq.gz R_2.fastq.gz -o mouse_count
