@@ -1,35 +1,30 @@
+
+## read-in gtf
+full.gtf <- read.table("~/Downloads/merged.gtf", sep = '\t', header = F, stringsAsFactor = FALSE)
+# select rows containing 'gene_name'
+with.gnm.gtf <- full.gtf[grepl("gene_name", full.gtf$V9), ]
+# select rows without 'gene_name'
+without.gnm.gtf <- full.gtf[!grepl("gene_name", full.gtf$V9), ]
+# you can write out the data.frames using write.table or write.xlsx
+write.table(with.gnm.gtf, "with.gnm.gtf", sep = '\t', row.names = F, col.names = F)
+write.table(without.gnm.gtf, "without.gnm.gtf", sep = '\t', row.names = F, col.names = F)
+grepl("gene_name", full.gtf$V9)
+full.gtf[ grepl("gene_name", full.gtf$V9), ]
 library(ASpli)
 TxDb <- makeTxDbFromGFF(file="Neurospora_crassa.NC12.34.gtf",format="gtf")
-
 features <- binGenome(TxDb)
-
 GenesCoord <- featuresg(features)
-
 BinsCoord <- featuresb(features)
-
 JunctionsCoord <- featuresj(features)
-
 targets<-read.delim("design.txt",header=T,sep="\t",row.names=1)
-
 bam <- loadBAM(targets)
-
 counts <- readCounts(features, bam, l=100L, maxISize=5000)
-
 GeneCounts <- countsg(counts)
-
 GeneRd <- rdsg(counts)
-
 BinCounts <- countsb(counts)
-
 BinRd <- rdsb(counts)
-
 JunctionCounts <- countsj(counts)
-
 e1iCounts <- countse1i(counts)
-
 ie2Counts <- countsie2(counts)
-
-
 pair <- c("d0","d1")
-
 as <- AsDiscover(counts=counts, targets=targets, features=features, bam=bam, l=50L, pair=pair)
