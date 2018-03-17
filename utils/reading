@@ -27,3 +27,4 @@ kallisto index -i mouse_index_kalisto Mus_musculus.GRCm38.rna.fa.gz
 kallisto quant -i mouse_index_kalisto -t 16 -b 100 R1.fastq.gz R_2.fastq.gz -o mouse_count
 
 https://hcc-docs.unl.edu/display/HCCDOC/Trinity
+https://www.nature.com/articles/ncomms14421
