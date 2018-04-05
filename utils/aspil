@@ -1,3 +1,4 @@
+ egrep -w '"u"' merged.gtf >text.txt
 
 ## read-in gtf
 full.gtf <- read.table("~/Downloads/merged.gtf", sep = '\t', header = F, stringsAsFactor = FALSE)
