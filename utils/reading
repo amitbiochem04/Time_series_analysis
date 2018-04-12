@@ -29,3 +29,5 @@ kallisto quant -i mouse_index_kalisto -t 16 -b 100 R1.fastq.gz R_2.fastq.gz -o m
 https://hcc-docs.unl.edu/display/HCCDOC/Trinity
 https://www.nature.com/articles/ncomms14421
 https://davetang.org/muse/2017/10/25/getting-started-hisat-stringtie-ballgown/
+https://hms-dbmi.github.io/scw/alignment.html
+https://bioinformatics.uconn.edu/single-cell-rna-sequencing-cell-ranger-2/
