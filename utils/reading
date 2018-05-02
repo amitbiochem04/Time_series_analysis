@@ -32,3 +32,7 @@ https://davetang.org/muse/2017/10/25/getting-started-hisat-stringtie-ballgown/
 https://hms-dbmi.github.io/scw/alignment.html
 https://bioinformatics.uconn.edu/single-cell-rna-sequencing-cell-ranger-2/
 https://www.biostars.org/p/199310/
+
+pandoc frontiers.tex -o my-document.docx
+pandoc --bibliography sample.bib --csl=frontiersinSCNS_ENG_HUMS -o OUT.docx frontiers.tex
+pandoc -s frontiers.tex --bibliography=sample.bib -o foo.docx
