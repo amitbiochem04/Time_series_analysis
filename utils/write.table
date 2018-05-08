@@ -1,0 +1,3 @@
+require(DT)
+y<-datatable(iris,options = list(pageLength=20))
+DT::saveWidget(y, 'foo.html') 
