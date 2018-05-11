@@ -36,3 +36,5 @@ https://www.biostars.org/p/199310/
 pandoc frontiers.tex -o my-document.docx
 pandoc --bibliography sample.bib --csl=frontiersinSCNS_ENG_HUMS -o OUT.docx frontiers.tex
 pandoc -s frontiers.tex --bibliography=sample.bib -o foo.docx
+#####
+http://seqanswers.com/forums/showthread.php?t=58221
