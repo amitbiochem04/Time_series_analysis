@@ -1,0 +1,22 @@
+
+set.seed(31)
+a <- runif(10, 0, 10)
+b <- runif(10, 0, 10)
+c <- runif(10, 0, 10)
+df <- data.frame(a=a, b=b, c=c)
+
+my_sem <- apply(df, 2, sem)
+
+#new data frame for storing the mean and sem
+mean_sem <- data.frame(mean=my_mean, sem=my_sem, group=names(df))
+
+#larger font
+theme_set(theme_gray(base_size = 20))
+
+#plot using ggplot
+ggplot(mean_sem, aes(x=group, y=mean)) +
+  geom_bar(stat='identity') +
+  geom_errorbar(aes(ymin=mean-sem, ymax=mean+sem),
+                width=.2) +
+  xlab('Class') +
+  ylab('Foldchnage)
