@@ -5,6 +5,20 @@ b <- runif(10, 0, 10)
 c <- runif(10, 0, 10)
 df <- data.frame(a=a, b=b, c=c)
 
+
+error.bar <- function(x, y, upper, lower=upper, length=0.1,...){
+   if(length(x) != length(y) | length(y) !=length(lower) | length(lower) != length(upper))
+   stop("vectors must be same length")
+   arrows(x,y+upper, x, y-lower, angle=90, code=3, length=length, ...)
+}
+ 
+#function for standard error of the mean
+sem <- function(x){
+  sd(x)/sqrt(length(x))
+}
+ 
+
+
 my_sem <- apply(df, 2, sem)
 
 #new data frame for storing the mean and sem
