@@ -1,0 +1,33 @@
+cho `date`;
+dir=(`dirname $1`)
+base=(`basename $1`)
+echo "1/7 Preparing files";
+cat $1 | sed 's/ "/\t/g' | sed 's/"; /\t/g' | cut -f1,4,5,7,10,12,16,18,22 | sed 's/";//' | awk '!x[$6]++' | awk '{print $6"\t"$0;}' > $dir/enst_annotation.tmp;
+cat $1 | sed 's/ "/\t/g' | sed 's/"; /\t/g' | cut -f1,4,5,7,10,12,16,18,22 | sed 's/";//' | awk '!x[$5]++' | awk '{print $5"\t"$0;}' > $dir/ensg_annotation.tmp;
+cat $1 | sed 's/ "/\t/g' | sed 's/"; /\t/g' | cut -f1,4,5,7,10,12,16,18,22 | sed 's/";//' | awk '{print $6"\t"$2;}' | awk 'BEGIN{FS="\t"}{ if( !seen[$1]++ ) order[++oidx] = $1; stuff[$1] = stuff[$1] $2 "," } END { for( i = 1; i <= oidx; i++ ) print order[i]"\t"stuff[order[i]] }' > $dir/enst_start.tmp;
+cat $1 | sed 's/ "/\t/g' | sed 's/"; /\t/g' | cut -f1,4,5,7,10,12,16,18,22 | sed 's/";//' | awk '{print $5"\t"$2;}' | awk 'BEGIN{FS="\t"}{ if( !seen[$1]++ ) order[++oidx] = $1; stuff[$1] = stuff[$1] $2 "," } END { for( i = 1; i <= oidx; i++ ) print order[i]"\t"stuff[order[i]] }' > $dir/ensg_start.tmp;
+cat $1 | sed 's/ "/\t/g' | sed 's/"; /\t/g' | cut -f1,4,5,7,10,12,16,18,22 | sed 's/";//' | awk '{print $6"\t"$3;}' | awk 'BEGIN{FS="\t"}{ if( !seen[$1]++ ) order[++oidx] = $1; stuff[$1] = stuff[$1] $2 "," } END { for( i = 1; i <= oidx; i++ ) print order[i]"\t"stuff[order[i]] }' > $dir/enst_end.tmp;
+cat $1 | sed 's/ "/\t/g' | sed 's/"; /\t/g' | cut -f1,4,5,7,10,12,16,18,22 | sed 's/";//' | awk '{print $5"\t"$3;}' | awk 'BEGIN{FS="\t"}{ if( !seen[$1]++ ) order[++oidx] = $1; stuff[$1] = stuff[$1] $2 "," } END { for( i = 1; i <= oidx; i++ ) print order[i]"\t"stuff[order[i]] }' > $dir/ensg_end.tmp;
+echo "2/7 sorting and joining files - Transcripts";
+sort -k1,1 ${dir}/enst_start.tmp > ${dir}/enst_start_sort.tmp;
+sort -k1,1 ${dir}/enst_end.tmp > ${dir}/enst_end_sort.tmp;
+join -j1 -t $'\t' ${dir}/enst_start_sort.tmp ${dir}/enst_end_sort.tmp > ${dir}/enst_location.tmp
+sort -k1,1 ${dir}/enst_annotation.tmp > ${dir}/enst_annotation_sort.tmp;
+sort -k1,1 ${dir}/enst_location.tmp > ${dir}/enst_location_sort.tmp;
+join -j1 -t $'\t' ${dir}/enst_annotation_sort.tmp ${dir}/enst_location_sort.tmp > ${dir}/enst_annotation.txt;
+echo "3/7 sorting and joining files - Genes";
+### ENSG
+sort -k1,1 ${dir}/ensg_start.tmp > ${dir}/ensg_start_sort.tmp;
+sort -k1,1  ${dir}/ensg_end.tmp > ${dir}/ensg_end_sort.tmp;
+join -j1 -t $'\t' ${dir}/ensg_start_sort.tmp ${dir}/ensg_end_sort.tmp > ${dir}/ensg_location.tmp
+sort -k1,1 ${dir}/ensg_annotation.tmp > ${dir}/ensg_annotation_sort.tmp;
+sort -k1,1 ${dir}/ensg_location.tmp > ${dir}/ensg_location_sort.tmp;
+join -j1 -t $'\t' ${dir}/ensg_annotation_sort.tmp ${dir}/ensg_location_sort.tmp > ${dir}/ensg_annotation.txt;
+echo "4/7 Distance measure - Transcripts";
+cat $dir/enst_annotation.txt | awk 'function max(x){i=0;for(val in x){if(i<=x[val]){i=x[val];}}return i;}function min(x){i=max(x);for(val in x){if(i>x[val] && x[val]>1){i=x[val];}}return i;}{split($11,a,",") ; split($12,b,","); print $0"\t"min(a)"\t"max(b);}' | awk 'BEGIN{FS="\t"}{print $1"\t"$2"\t"$13"\t"$14"\t"$5"\t"$6"\t"$8"\t"$9;}' >  ${dir}/${base}_enst_annotation.txt;
+echo "5/7 Distance measure - Genes";
+cat $dir/ensg_annotation.txt | awk 'function max(x){i=0;for(val in x){if(i<=x[val]){i=x[val];}}return i;}function min(x){i=max(x);for(val in x){if(i>x[val] && x[val]>1){i=x[val];}}return i;}{split($11,a,",") ; split($12,b,","); print $0"\t"min(a)"\t"max(b);}' | awk 'BEGIN{FS="\t"}{print $1"\t"$2"\t"$13"\t"$14"\t"$5"\t"$8"\t"$9;}' >  ${dir}/${base}_ensg_annotation.txt;
+echo "6/7 Cleaning temporary files";
+rm $dir/enst_annotation.tmp $dir/ensg_annotation.tmp $dir/enst_start.tmp $dir/ensg_start.tmp $dir/enst_end.tmp $dir/ensg_end.tmp $dir/enst_annotation.txt $dir/ensg_annotation.txt $dir/enst_location.tmp $dir/ensg_location.tmp ${dir}/enst_start_sort.tmp ${dir}/enst_end_sort.tmp ${dir}/ensg_start_sort.tmp ${dir}/ensg_end_sort.tmp ${dir}/enst_location_sort.tmp ${dir}/ensg_location_sort.tmp ${dir}/ensg_annotation_sort.tmp ${dir}/enst_annotation_sort.tmp;
+echo "7/7 Done";
+echo `date`;
