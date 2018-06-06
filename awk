@@ -6,3 +6,7 @@ awk '{
     }
     print ""
 }' Homo_sapiens.GRCh37.70.gtf | sed -e 's/"//g' -e 's/;//g' -e 's/ /\t/' | sort -k1,1 | uniq > Homo_sapiens.GRCh37.70.txt
+
+####spliting chromose wise your fastafile 
+pip install pyfaidx 
+faidx -x sequences.fa
