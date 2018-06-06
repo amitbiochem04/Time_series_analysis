@@ -10,3 +10,5 @@ awk '{
 ####spliting chromose wise your fastafile 
 pip install pyfaidx 
 faidx -x sequences.fa
+
+awk 'BEGIN {O="";} /^>/ { O=sprintf("%s.fa",substr($0,2));} {if(O!="") print >> O;}' input.fa
