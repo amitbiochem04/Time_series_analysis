@@ -53,3 +53,8 @@ pandoc --bibliography sample.bib --csl=frontiersinSCNS_ENG_HUMS -o OUT.docx fron
 pandoc -s frontiers.tex --bibliography=sample.bib -o foo.docx
 #####
 http://seqanswers.com/forums/showthread.php?t=58221
+
+#####
+https://github.com/irusri/Extract-intron-from-gff3
+
+
