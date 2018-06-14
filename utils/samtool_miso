@@ -1,0 +1,3 @@
+
+samtools view -H accepted_hits.bam > header.sam
+samtools reheader header.sam accepted_hits.bam >test.bam
