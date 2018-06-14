@@ -1,3 +1,13 @@
-
+######creat samtools faidx genome.fasta
+samtools faidx genome.fasta
+vi genome.fasta.fa.fai
+##change the name to ucsc style
+###chnage the bam file hader 
 samtools view -H accepted_hits.bam > header.sam
 samtools reheader header.sam accepted_hits.bam >test.bam
+####down load gff3file from ensemble and index them 
+index_gff --index SE.mm9.gff indexed/
+###for single end read 
+samtools index samtools sort >test_sort.bam
+samtools index test_sort.bam
+miso --run indexed_SE_events/ test.bam --output-dir my_sample_output/ --read-len 35
