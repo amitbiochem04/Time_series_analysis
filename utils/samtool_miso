@@ -17,3 +17,4 @@ miso --run indexed_SE_events/ WT60_1_sort.bam --output-dir ~/mnt/alternative/out
 
 miso_pack --pack output/
 summarize_miso --summarize-samples output/ summaries/
+
