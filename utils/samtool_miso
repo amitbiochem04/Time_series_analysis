@@ -12,4 +12,8 @@ index_gff --index SE.mm9.gff indexed/
 samtools view WT60_1_sort.bam | head -n 1000 | gawk '{print length($10)}' | sort | uniq -c | perl -ane '$_ =~ s/^[ ]+//g;print $_' | sort -k 1nr,1nr | head -1 | cut -f2 -d " "
 samtools sort test.bam >test_sort.bam
 samtools index test_sort.bam
-miso --run indexed_SE_events/ test.bam --output-dir my_sample_output/ --read-len 35
+
+miso --run indexed_SE_events/ WT60_1_sort.bam --output-dir ~/mnt/alternative/output/ --read-len 49
+
+miso_pack --pack output/
+summarize_miso --summarize-samples output/ summaries/
