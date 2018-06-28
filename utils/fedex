@@ -1,0 +1,5 @@
+ manual 
+ https://github.com/sahwar/fex
+ http://manpages.ubuntu.com/manpages/trusty/man1/fexsend.1.html
+ fexsend all_format.tar.gz a@b.de
+ https://fex.rus.uni-stuttgart.de/usecases/fexsend.html
