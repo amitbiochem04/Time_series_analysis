@@ -23,10 +23,18 @@ if (!require(Biostrings)) {
 # create a position weight matrix
 ##################################
 
-dna = DNAStringSet("ATTCCATTGATCACGA")
+dna2consensusMatrix <- function(dna_sequence) {
+  dna = DNASTringSet(dna_equence)
+  consensusMatrix(dna)
+}
 
-d <- consensusMatrix(dna)
-pwm <- PWM(d)
+dna2pwm <- function(dna_sequence) {
+  PWM(dna2consensusMatrix(dna_sequence))
+}
+
+pwm <- dna2pwm("ATTCCATTGATCACGA")
+
+
 
 # pwm is your position weight matrix
 # now create a poistion profile matrix to get a score 
@@ -35,14 +43,31 @@ pwm <- PWM(d)
 # Looking for binding potential for a single TF on a sequence
 ############################################################
 
-d <- d[1:4,]
+d <- dna2consensusMatrix(dna_sequence)[1:4,]
+
+tf_bindingsites <- function(search_seq, tf_seq, 
+                            ID="LRE", 
+                            name="FRQ",
+                            matrixClass="Unknown",
+                            strand="+",
+                            tags=list(),
+                            bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
+                           ...) {
+  seq <- unlist(readDNAStringSet("selected_gene_seq.fa"))
+  pfm <- PFMatrix(
+                profileMatrix=d)
+  getSeqOccupancy(sequence, pfm, 1)
+}
+
+
+
 pfm <- PFMatrix(ID="LRE", 
                 name="FRQ",
                 matrixClass="Unknown",
                 strand="+",
                 tags=list(),
-                bg=c(A=0.25, C=0.25, G=0.25, T=0.25), p
-                rofileMatrix=d)
+                bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
+                profileMatrix=d, ...)
 
 # load the fasta file, meaning that gene of interest here we have FRQ
 
