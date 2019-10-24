@@ -1,9 +1,15 @@
 require(DT)
-y<-datatable(iris,options = list(pageLength=20))
-DT::saveWidget(y, 'foo.html') 
+
+y <- datatable(iris,
+               options = list(pageLength=20))
+
+DT::saveWidget(y, 'foo.html')
+
 iris2 = iris[c(1:10, 51:60, 101:110), ]
-y<-datatable(iris2, filter = 'top', options = list(
-  pageLength = 5, autoWidth = TRUE
-))
+
+y <- datatable(iris2, 
+               filter = 'top', 
+               options = list(pageLength = 5, 
+                              autoWidth = TRUE))
 
 DT::saveWidget(y, 'foo.html') 
